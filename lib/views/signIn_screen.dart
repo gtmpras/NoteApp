@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:note_app/views/forgotPassword_screen.dart';
 import 'package:note_app/views/signUp_screen.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -67,11 +68,16 @@ class _SignInScreenState extends State<SignInScreen> {
         
               }, child: Text("Login")),
               SizedBox(height: height*0.001,),
-              Container(
-                child: Card(child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('Forgot Password'),
-                ))),
+              GestureDetector(
+                onTap: (){
+                  Get.to(()=>ForgotPasswordScreen());
+                },
+                child: Container(
+                  child: Card(child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('Forgot Password'),
+                  ))),
+              ),
               SizedBox(height: height*0.001,),
               GestureDetector(
                 onTap:(){
