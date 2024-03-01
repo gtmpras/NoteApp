@@ -1,9 +1,11 @@
 
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:note_app/views/forgotPassword_screen.dart';
+import 'package:note_app/views/homeScreen.dart';
 import 'package:note_app/views/signUp_screen.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -14,6 +16,8 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
+  TextEditingController loginEmailCOntroller = TextEditingController();
+  TextEditingController loginPasswordCOntroller = TextEditingController();
   @override
   Widget build(BuildContext context) {
   final width = MediaQuery.sizeOf(context).width *1;
@@ -42,6 +46,7 @@ class _SignInScreenState extends State<SignInScreen> {
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 30.0),
                 child: TextFormField(
+                  controller: loginEmailCOntroller,
                   decoration: InputDecoration(
                     prefixIcon: Icon(Icons.email),
                     hintText: 'Email',
@@ -54,6 +59,7 @@ class _SignInScreenState extends State<SignInScreen> {
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 30.0),
                 child: TextFormField(
+                  controller: loginPasswordCOntroller,
                   decoration: InputDecoration(
                     prefixIcon: Icon(Icons.visibility),
                     hintText: 'Password',
@@ -64,8 +70,22 @@ class _SignInScreenState extends State<SignInScreen> {
               ),
               SizedBox(height: height*0.01,),
               ElevatedButton(
-                onPressed: (){
-        
+                onPressed: ()async{
+                  var loginEmail = loginEmailCOntroller.text.trim();
+                  var loginPassword = loginPasswordCOntroller.text.trim();
+
+                try{
+                  final User? firebaseUser = (await FirebaseAuth.instance.
+                  signInWithEmailAndPassword(
+                    email: loginEmail, password: loginPassword)).user;
+                    if(firebaseUser != null){
+                      Get.to(()=>HomeScreen());
+                    }else{
+                      print("Check Email and Password");
+                    }
+              }on FirebaseAuthException catch(e){
+                  print("Error $e");
+                }
               }, child: Text("Login")),
               SizedBox(height: height*0.001,),
               GestureDetector(
