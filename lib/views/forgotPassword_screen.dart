@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:note_app/views/signIn_screen.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -9,6 +12,7 @@ class ForgotPasswordScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+  TextEditingController forgetPasswordCOntroller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.sizeOf(context).width * 1;
@@ -38,6 +42,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 30.0),
                 child: TextFormField(
+                  controller: forgetPasswordCOntroller,
                   decoration: InputDecoration(
                     prefixIcon: Icon(Icons.email),
                     hintText: 'Email',
@@ -48,7 +53,22 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               SizedBox(
                 height: height * 0.01,
               ),
-              ElevatedButton(onPressed: () {}, child: Text("Sign Up")),
+              ElevatedButton(onPressed: ()async {
+                var forgotEmail = forgetPasswordCOntroller.text.trim();
+
+                try{
+                 await FirebaseAuth.instance.sendPasswordResetEmail(
+                    email: forgotEmail).then((value) => {
+                      print("Email sent!"),
+                      Get.off(()=> SignInScreen()),
+                    });
+                    
+                }
+                on FirebaseAuthException catch(e){
+                  print("error $e");
+                }
+
+              }, child: Text("Sign Up")),
               SizedBox(
                 height: height * 0.001,
               ),
