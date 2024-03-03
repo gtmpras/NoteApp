@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:note_app/views/createNoteScreen.dart';
+import 'package:note_app/views/editNoteScreen.dart';
 import 'package:note_app/views/signIn_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -52,14 +53,24 @@ class _HomeScreenState extends State<HomeScreen> {
                 itemBuilder: (context,index){
                   var note = snapshot.data!.docs[index]['note'];
                   var userid = snapshot.data!.docs[index]['userid'];
+                  var docId = snapshot.data!.docs[index].id;
                   return Card(child: ListTile(
                     title: Text(note),
                     subtitle: Text(userid),
                     trailing: Row(
                       mainAxisSize:MainAxisSize.min ,
                       children: [
-                        Icon(Icons.edit),
-                        SizedBox(width:10),
+                        GestureDetector(
+                          onTap:(){
+                            //print(docId);
+                            Get.to(()=>EditNoteScreen(),
+                            arguments: {
+                              'note': note,
+                              'docId' : docId
+                            });
+                          },
+                          child: Icon(Icons.edit)),
+                        SizedBox(width:20),
                         Icon(Icons.delete)
                       ],
                     ),
